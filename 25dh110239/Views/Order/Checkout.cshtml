@@ -1,0 +1,49 @@
+﻿@model _25dh110239.Models.ViewModel.CheckoutVM
+
+@{
+    ViewBag.Title = "Thanh toán";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>XÁC NHẬN ĐẶT HÀNG</h2>
+
+@using (Html.BeginForm("Checkout", "Order", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-7">
+            <h4>Thông tin giao hàng</h4>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ShippingAddress)
+                @Html.TextBoxFor(m => m.ShippingAddress, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ShippingMethod)
+                @Html.DropDownListFor(m => m.ShippingMethod, new SelectList(new[] { "Giao hàng nhanh", "Giao hàng tiết kiệm" }), "Chọn phương thức giao", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.PaymentMethod)
+                @Html.DropDownListFor(m => m.PaymentMethod, new SelectList(new[] { "Tiền mặt", "Paypal", "Mua trước trả sau" }), "Chọn phương thức thanh toán", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <h4>Tóm tắt đơn hàng</h4>
+            <table class="table">
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td>@item.ProductName (x @item.Quantity)</td>
+                        <td class="text-right">@item.TotalPrice.ToString("N0") VNĐ</td>
+                    </tr>
+                }
+                <tr>
+                    <td><strong>Tổng cộng:</strong></td>
+                    <td class="text-right"><strong style="color:red;">@Model.TotalAmount.ToString("N0") VNĐ</strong></td>
+                </tr>
+            </table>
+            <button type="submit" class="btn btn-success btn-block btn-lg">Xác nhận đặt hàng</button>
+        </div>
+    </div>
+}

@@ -1,0 +1,81 @@
+﻿@model _25dh110239.Models.ViewModel.HomeProductVM
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Trang chủ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- BANNER -->
+<section class="banner text-center" style="background-color:#f5f5f5; padding: 30px 0; margin-bottom: 20px;">
+    <h2>Chào mừng đến với MyStore</h2>
+    <p>Mua sắm trực tuyến với hàng ngàn sản phẩm đa dạng và chất lượng</p>
+</section>
+
+<!-- Ô TÌM KIẾM -->
+<section class="searchProd text-center" style="margin-bottom:30px;">
+    <h3>Tìm kiếm sản phẩm</h3>
+    @using (Html.BeginForm("Index", "Home", FormMethod.Get))
+    {
+        <div class="form-group form-inline">
+            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", style = "width: 300px;", placeholder = "Nhập tên, mô tả hoặc loại sản phẩm..." })
+            <button type="submit" class="btn btn-danger">Tìm kiếm</button>
+        </div>
+    }
+</section>
+<hr />
+
+<!-- SẢN PHẨM NỔI BẬT -->
+@if (Model.FeaturedProducts != null && Model.FeaturedProducts.Any())
+{
+    <section class="featureProd">
+        <h3>Sản phẩm nổi bật</h3>
+        <div class="row">
+            @foreach (var item in Model.FeaturedProducts)
+            {
+                <div class="col-md-3 col-sm-6" style="margin-bottom:20px;">
+                    <div class="thumbnail text-center">
+                        <img src="@item.ProductImage" alt="@item.ProductName" style="height:150px; object-fit:contain;" />
+                        <div class="caption">
+                            <h4>@item.ProductName</h4>
+                            <p style="color:red; font-weight:bold;">@(item.ProductPrice.ToString("N0")) VNĐ</p>
+                            <a href="@Url.Action("AddToCart", "Cart", new { id = item.ProductID })" class="btn btn-primary">Thêm vào giỏ</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+    <hr />
+}
+
+<!-- SẢN PHẨM MỚI (CÓ PHÂN TRANG) -->
+@if (Model.NewProducts != null && Model.NewProducts.Any())
+{
+    <section class="listProduct">
+        <h3>Sản phẩm mới</h3>
+        <div class="row">
+            @foreach (var item in Model.NewProducts)
+            {
+                <div class="col-md-3 col-sm-6" style="margin-bottom:20px;">
+                    <div class="thumbnail text-center">
+                        <img src="@item.ProductImage" alt="@item.ProductName" style="height:150px; object-fit:contain;" />
+                        <div class="caption">
+                            <h4>@item.ProductName</h4>
+                            <p style="color:red; font-weight:bold;">@(item.ProductPrice.ToString("N0")) VNĐ</p>
+                            <a href="@Url.Action("AddToCart", "Cart", new { id = item.ProductID })" class="btn btn-primary">Thêm vào giỏ</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center">
+            @Html.PagedListPager(Model.NewProducts, page => Url.Action("Index", new { page, searchTerm = Model.SearchTerm }))
+        </div>
+    </section>
+}
+else
+{
+    <p class="text-center">Không tìm thấy sản phẩm nào.</p>
+}

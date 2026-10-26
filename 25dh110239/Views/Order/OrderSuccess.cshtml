@@ -1,0 +1,14 @@
+﻿@model _25dh110239.Order
+@{
+    ViewBag.Title = "Đặt hàng thành công";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center" style="margin-top:50px;">
+    <h2 style="color:green;">CẢM ƠN BẠN ĐÃ ĐẶT HÀNG!</h2>
+    <p>Mã đơn hàng của bạn là: <strong>#@Model.OrderID</strong></p>
+    <p>Tổng tiền: <strong style="color:red;">@Model.TotalAmount.ToString("N0") VNĐ</strong></p>
+    <p>Địa chỉ giao hàng: @Model.ShippingAddress</p>
+    <br />
+    <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Trở về trang chủ</a>
+</div>
